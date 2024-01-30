@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Stock</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .stock-container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+
+        #backButton {
+    position: fixed; /* Use 'fixed' instead of 'absolute' for a button that stays in place while scrolling */
+    left: 10px; /* Distance from the left side */
+    background-color: #c8ff00; /* A neutral color that matches many designs */
+    color: #333; /* A color that ensures the text is readable */
+    border: 1px solid #ccc; /* A subtle border */
+    border-radius: 9px; /* Rounded corners for a modern look */
+    cursor: pointer; /* Changes the cursor to a pointer to indicate it's clickable */
+    font-size: 20px; /* A smaller font size for the text within the button */
+    text-decoration: none; /* Removes underline from text if you're using an <a> tag */
+    box-shadow: 1px 1px 2px #999; /* Optional: Adds a subtle shadow for depth */
+    z-index: 1000;
+    top: 10px;
+    width: 6%; /* Ensures the button is above other elements */
+}
+
+#backButton:hover {
+    background-color: #e2e2e2; /* A slightly different color on hover for feedback */
+    box-shadow: none; /* Optional: Removes the shadow on hover for a pressed effect */
+}
+
+    </style>
+</head>
+<body>
+    <button id="backButton" onclick="window.location.href='admin_menu.html'">Back</button>
+
+    <div class="stock-container">
+        <h2>Stock Overview</h2>
+        <table id="stockTable">
+            <thead>
+                <tr>
+                    <th>Medicine Name</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Stock data will be populated here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function populateTable(data) {
+            const table = document.getElementById('stockTable').getElementsByTagName('tbody')[0];
+            table.innerHTML = ''; // Clear existing rows
+            data.forEach(item => {
+                let row = table.insertRow();
+                let cell1 = row.insertCell(0);
+                let cell2 = row.insertCell(1);
+                cell1.innerHTML = item.name;
+                cell2.innerHTML = item.quantity;
+            });
+        }
+
+        // Fetch stock data from the PHP script
+        fetch('view_stock.php') // Adjust the URL as needed
+            .then(response => response.json())
+            .then(data => populateTable(data))
+            .catch(error => console.error('Error:', error));
+    </script>
+</body>
+</html>

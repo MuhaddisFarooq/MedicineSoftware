@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+
+.table-container {
+        max-height: 300px; /* Maximum height */
+        overflow-y: auto; /* Enable vertical scrolling */
+        margin-bottom: 20px;
+    }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .invoice-container {
+            background: #fff;
+            padding: 20px;
+            margin: 20px auto;
+            width: 90%;
+            position: relative; /* For positioning the suggestions box */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        input[type="number"], input[type="text"] {
+            padding: 5px;
+            margin: 4px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            -webkit-transition: 0.5s;
+            transition: 0.5s;
+            outline: none;
+        }
+
+        input[type="number"]:focus, input[type="text"]:focus {
+            border-color: #555;
+        }
+
+        .small-input {
+            width: 80px;
+        }
+
+        .medium-input {
+            width: 250px;
+        }
+
+        .large-input {
+            width: 100%;
+        }
+        .btn {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        #suggestions {
+            background-color: white;
+            border: 1px solid #ddd;
+            position: absolute;
+            z-index: 1000;
+        }
+        #suggestions div {
+            padding: 5px;
+            cursor: pointer;
+        }
+        #suggestions div:hover {
+            background-color: #f0f0f0;
+        }
+
+        .remove-btn {
+            background-color: #f44336; /* Red */
+            color: white;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 12px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+        }
+        .remove-btn:hover {
+            background-color: #d32f2f;
+        }
+      
+
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .invoice-header div {
+            margin: 5px;
+        }
+        .invoice-info {
+            display: flex;
+            justify-content: space-between;
+        }
+        .invoice-info div {
+            margin: 5px;
+        }
+
+       
+        .totals-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 120px; /* Adjusted margin to push down the totals-container */
+}
+
+        .submit-container {
+            text-align: center;
+            margin-top: 30px; /* Space above the submit button */
+        }
+
+        .large-input {
+    width: 100%;
+    padding: 15px;
+    margin: 4px 0;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+}
+
+textarea.large-input {
+    resize: vertical; /* Allows vertical resizing, you can set to 'none' if resizing is not needed */
+}
+
+.warranty-section {
+    margin-top: 5px;
+    padding: 1px;
+    text-align: left;
+}
+
+.warranty-section h3 {
+    margin-top: 0;
+    color: #333; /* Dark text color for heading */
+}
+
+.warranty-section p {
+    margin-bottom: 0;
+    color: #666; /* Lighter text color for paragraph */
+}
+
+.signature-section {
+    display: flex;
+    justify-content: space-around; /* Adjust the spacing between signature sections */
+    margin-top: 20px; /* Reduced margin */
+    padding: 10px; /* Add padding for visual balance */
+}
+
+.signature {
+    text-align: center;
+    flex: 1; /* Ensure equal width for each signature block */
+}
+
+.signature label {
+    display: block;
+    margin-bottom: 5px; /* Reduced margin for a tighter look */
+    font-weight: bold;
+}
+
+
+
+.notes-section {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3px;
+}
+
+.note {
+    flex: 1; /* Each note takes equal width */
+    padding: 5px;
+    box-sizing: border-box; /* To ensure padding doesn't increase the width */
+}
+
+.note h4 {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.note p {
+    margin: 0;
+    font-size: 0.9em; /* Adjust size as needed */
+}
+
+.totals-item {
+    padding: 10px;
+    margin-bottom: 15px; /* Added bottom margin to push up the total items */
+}
+
+.right-section {
+    text-align: right;
+
+}
+#backButton {
+    position: fixed; /* Use 'fixed' instead of 'absolute' for a button that stays in place while scrolling */
+    left: 10px; /* Distance from the left side */
+    background-color: #c8ff00; /* A neutral color that matches many designs */
+    color: #333; /* A color that ensures the text is readable */
+    border: 1px solid #ccc; /* A subtle border */
+    border-radius: 9px; /* Rounded corners for a modern look */
+    cursor: pointer; /* Changes the cursor to a pointer to indicate it's clickable */
+    font-size: 20px; /* A smaller font size for the text within the button */
+    text-decoration: none; /* Removes underline from text if you're using an <a> tag */
+    box-shadow: 1px 1px 2px #999; /* Optional: Adds a subtle shadow for depth */
+    z-index: 1000;
+    top: 10px;
+    width: 4%; /* Ensures the button is above other elements */
+}
+
+#backButton:hover {
+    background-color: #e2e2e2; /* A slightly different color on hover for feedback */
+    box-shadow: none; /* Optional: Removes the shadow on hover for a pressed effect */
+}
+
+
+@media print {
+    input, textarea, button, .no-print {
+        display: none !important;
+    }
+    .print-only {
+        display: block !important;
+    }
+
+   
+    table {
+        width: 100%;
+        font-size: 9pt; /* Adjusted font size for table */
+    }
+
+    th, td {
+        padding: 2px; /* Reduced padding to increase available space */
+        font-size: 9pt; /* Ensuring consistency in font size */
+    }
+
+    .description{
+        width: 30%;
+    }
+    
+    .no-wrap {
+        white-space: nowrap; /* Prevents text from wrapping */
+        overflow: hidden; /* Hides any content that overflows the cell's box */
+        text-overflow: ellipsis; /* Indicates omitted overflow content with an ellipsis */
+    }
+
+    /* Apply no-wrap class to the cells that should not wrap */
+    .batch-no, .trade-price, .disc-price, .total-amount {
+        white-space: nowrap; /* This is essential to prevent wrapping */
+    }
+
+    /* Ensure that the inputs look like normal text when printed */
+    input[type="text"], input[type="number"] {
+        font-size: 9pt; /* Matching the font size of the table */
+        border: none; /* Removing the border */
+        background: transparent; /* Removing the background */
+        width: auto; /* Allowing the width to adjust based on content */
+        padding: 0; /* Removing padding */
+    }
+
+
+ body, .invoice-container, .totals-container, .signature-section, .warranty-section {
+        background: none;
+        color: black;
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+    }
+
+   
+
+    .invoice-header, .notes-section, .signature-section, .warranty-section {
+        font-size: 11pt; /* Smaller font size */
+    }
+    .invoice-info{
+        font-size: 10pt
+    }
+
+   
+    
+
+    .totals-container {
+        margin-top: 350px;
+        font-size: 10pt; /* Adjusted margin for print layout */
+    }
+  
+    .warranty-section, .submit-container {
+        display: block; /* Ensure they are visible and compact */
+        page-break-inside: avoid; /* Prevent page break inside these sections */
+        font-size:10pt;
+    }
+    
+    .warranty-section h3 {
+    font-size: 10pt;
+        margin-top: 0;
+    color: #333; /* Dark text color for heading */
+}
+
+
+
+
+   
+}
+/* Non-print styles */
+.print-only {
+    display: none;
+}
+
+    </style>
+</head>
+<body>
+    <button id="backButton" onclick="window.location.href='menu.html'">Back</button>
+
+    <div class="invoice-container">
+        
+      
+       
+        <div class="invoice-header">
+            <div>
+                <h2>SHAHID BROTHERS</h2>
+                <p>MEDICINE MARKET, TOWN HALL, MULTAN</p>
+            </div>
+            <div>
+                <p>Phone: 03009633408</p>
+            </div>
+            <div>
+
+               
+                
+              
+                <h3 style="font-weight: bold; margin-top: 10px;">INVOICE</h3>
+
+
+            </div>
+
+            <div class="invoice-info">
+                <!-- Existing info content -->
+
+                <div class="right-section">
+                    <p>Invoice ID: <span id="invoiceId"></span></p>
+                    <p>Date: <span id="invoiceDate"></span></p>
+                </div>
+                            
+                
+                <div>
+
+
+                    
+                    <span id="printPharmacyName" class="print-only"></span>
+                    <input type="text" id="pharmacyName" name="pharmacyName" class="large-input">
+                    
+                    <input type="text" id="pharmacyStreet" name="pharmacyStreet" class="large-input">
+                    <span id="printPharmacyStreet" class="print-only"></span>
+
+                    <input type="text" id="pharmacyCity" name="pharmacyCity" class="large-input">
+                    <span id="printPharmacyCity" class="print-only"></span>
+
+
+                   
+
+
+                </div>
+                
+            </div>
+
+
+            
+        </div>
+    
+        <form id="invoiceForm">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Qty</th>
+                        <th>Bon</th>
+                        <th>Description</th>
+                        <th>Packing</th>
+                        <th>Batch No</th>
+                        <th>Retail Price (Rs.)</th>
+                        <th>Trade Price (Rs.)</th>
+                        <th>Additional Disc (%)</th>
+                        <th>Disc Price (Rs.)</th>
+                        <th>Total Amount (Rs.)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <span class="print-qty"></span>
+                        <span class="print-bon"></span>
+                        <span class="print-packing"></span>
+                        <span class="print-batch"></span>
+
+
+
+                        <td><span class="print-only" id="printQty1"></span><input class="small-input" type="number" name="qty" value="0" min="1" required onchange="calculateTotal(this)"></td>
+                         <td><span class="print-only" id="printBon1"></span><input class="small-input" type="number" name="bon" value="0" min="0"></td>
+                        <td class="description"><span class="print-only" id="printDescription1"></span>
+                            <input class="large-input description" required type="text" name="description" autocomplete="off">
+                            <div class="suggestions"></div>
+                        </td>
+                        <td><span class="print-only" id="printPack1"></span><input class="medium-input" required type="text" name="packing"></td>
+                        <td class="batch-no"><span class="print-only" id="printBatch1"></span><input class="medium-input" required type="text" name="batchNo"></td>
+                        <td><span class="print-only" id="printRetail1"></span><input class="small-input" required type="number" name="retailPrice" value="0" min="0" step="any" onchange="calculateTotal(this)"></td>
+                        <td class="price-after-disc no-wrap"></td>
+                        <td><span class="print-only" id="printDisc1"></span><input class="small-input" type="number" name="addDiscPercent" value="0" min="0" max="100" step="any" onchange="calculateTotal(this)"></td>
+                        <td class="add-discount-value no-wrap"></td>
+                        <td class="totalAmount no-wrap"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn no-print" onclick="addRow()">Add Another Item</button>
+               
+           
+           
+            <div class="totals-container">
+               
+               
+                <div>
+                    <strong>Total Items:</strong> <span id="totalItems">0</span>
+                </div>
+               
+
+                <div>
+                    <strong>Net:</strong> <span id="netTotalInWords"></span>
+                </div>
+
+                <div>
+                    <strong>Net Total (Rs.):</strong> <span id="netTotal">0.00</span>
+                </div>
+             
+            </div>
+
+
+            <div class="notes-section">
+                <div class="note">
+                    <h4>Note 1:</h4>
+                    <p>Expiry: Intimate in writing before SIX Months./Bal Diff. Intimate within ten days.</p>
+
+                    <h4>Note 2:</h4>
+                    <p>No claim for shortage leakage and breakage will be accepted after medicines have been delivered.</p>
+
+                </div>
+               
+            </div>
+
+            <!-- Signature Section -->
+<div class="signature-section">
+    <div class="signature">
+        <label>Checked By:</label>
+        <div class="signature-line"></div>
+    </div>
+    <div class="signature">
+        <label>Prepared By:</label>
+        <div class="signature-line"></div>
+    </div>
+    <div class="signature">
+        <label>For SHAHID BROTHERS:</label>
+        <div class="signature-line"></div>
+    </div>
+</div>
+            
+
+
+
+<div class="warranty-section">
+    <h3>WARRANTY</h3>
+    <p>As per drug act 1976, this is not an allopathic drug. It is a neutraceutical product as classified and enlisted according to SRO 412 (1) 2014 (DRAP)</p>
+</div>
+ 
+            <div class="submit-container">
+                <div id="submissionMessage"></div>
+
+                <input type="submit" class="btn no-print" value="Submit Invoice" />
+
+                <button type="button" id="printButton" class="btn" onclick="printInvoice()">Print Invoice</button>
+
+            </div>
+        </form>
+    </div>
+    
+
+<script>
+function calculateTotal(elem) {
+    var row = elem.closest('tr');
+    var qty = parseFloat(row.querySelector('input[name="qty"]').value) || 0;
+    var retailPrice = parseFloat(row.querySelector('input[name="retailPrice"]').value) || 0;
+    var addDiscPercent = parseFloat(row.querySelector('input[name="addDiscPercent"]').value) || 0;
+
+    if (retailPrice > 0) {
+        var priceAfter15Disc = retailPrice - (retailPrice * 0.15);
+        var additionalDiscountValue = priceAfter15Disc * (addDiscPercent / 100);
+        var discountedPrice = priceAfter15Disc - additionalDiscountValue;
+        var totalAmount = qty * discountedPrice;
+
+        row.querySelector('.price-after-disc').textContent = 'Rs. ' + priceAfter15Disc.toFixed(2);
+        row.querySelector('.add-discount-value').textContent = 'Rs. ' + discountedPrice.toFixed(2);
+        row.querySelector('.totalAmount').textContent = 'Rs. ' + totalAmount.toFixed(2);
+    }
+
+    // Update net total and total items immediately after calculating the total amount
+    updateTotals();
+}
+
+function updateTotals() {
+    var totalItems = document.querySelectorAll("#invoiceForm tbody tr").length;
+    var netTotal = Array.from(document.querySelectorAll(".totalAmount")).reduce((sum, element) => {
+        return sum + parseFloat(element.textContent.replace('Rs. ', '') || 0);
+    }, 0);
+
+    document.getElementById('totalItems').textContent = totalItems;
+    var roundedNetTotal = Math.round(netTotal);
+    var netTotalInWords = numberToWords(roundedNetTotal);
+
+    document.getElementById('netTotal').textContent = netTotal.toFixed(2);
+    document.getElementById('netTotalInWords').textContent = netTotalInWords + ' RUPEE ONLY';
+}
+
+
+// Global variable to keep track of row count
+let rowCount = 1;
+
+function addRow() {
+    var tableBody = document.querySelector("#invoiceForm tbody");
+    var newRow = tableBody.insertRow(-1);
+    newRow.innerHTML = tableBody.rows[0].innerHTML; // Copy the innerHTML from the first row
+
+    // Increment the row count
+    rowCount++;
+
+   
+    newRow.querySelectorAll('.print-only').forEach(span => {
+        let baseId = span.id.replace(/[0-9]+$/, '');
+        span.id = baseId + rowCount;
+    });
+
+    // Clear input values for the new row
+    newRow.querySelectorAll('input').forEach(input => {
+        let name = input.name;
+        input.value = '';
+        if (name === 'description') {
+            setupAutocomplete(input); // Set up autocomplete for the new description input
+        }
+    });
+
+     // Add a remove button to the new row
+     var removeButton = document.createElement('button');
+    removeButton.className = 'remove-btn no-print';
+    removeButton.textContent = 'Remove';
+    removeButton.onclick = function() { removeRow(this); };
+    newRow.appendChild(removeButton);
+
+    updateTotals();
+}
+
+
+        function removeRow(button) {
+            var row = button.closest('tr');
+            if (document.querySelector("#invoiceForm tbody").rows.length > 1) {
+                row.remove();
+            } else {
+                alert("At least one item is required.");
+            }
+            updateTotals();
+
+        }
+
+
+        function showSuggestions(value, suggestionsBox) {
+    if (value.length == 0) {
+        suggestionsBox.innerHTML = "";
+        return;
+    }
+
+    fetch('get_medicine_suggestions.php?query=' + encodeURIComponent(value))
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(medicines => {
+            if (!medicines || !Array.isArray(medicines)) {
+                throw new Error('Response is not an array');
+            }
+            let suggestionsHTML = medicines.map(medicine =>
+                `<div onclick="selectMedicine('${medicine.replace(/'/g, "\\'")}', this.parentNode.previousElementSibling)">${medicine}</div>`
+            ).join('');
+            suggestionsBox.innerHTML = suggestionsHTML;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            suggestionsBox.innerHTML = ""; // Clear suggestions on error
+        });
+}
+
+function selectMedicine(value, inputElement) {
+    inputElement.value = value;
+    inputElement.nextElementSibling.innerHTML = "";
+}
+
+// Bind autocomplete to existing rows on page load
+document.querySelectorAll('.description').forEach(setupAutocomplete);
+
+
+
+
+function validateForm() {
+        // Check each required field in sequence
+        var allRowsValid = Array.from(document.querySelectorAll("#invoiceForm tbody tr")).every(row => {
+            var qty = parseFloat(row.querySelector('input[name="qty"]').value) || 0;
+            var description = row.querySelector('input[name="description"]').value.trim();
+            var packing = row.querySelector('input[name="packing"]').value.trim();
+            var batchNo = row.querySelector('input[name="batchNo"]').value.trim();
+            var retailPrice = parseFloat(row.querySelector('input[name="retailPrice"]').value) || 0;
+
+            if (qty <= 0) {
+                alert('Quantity must be greater than 0');
+                row.querySelector('input[name="qty"]').focus();
+                return false;
+            } else if (description === "") {
+                alert('Description is required');
+                row.querySelector('input[name="description"]').focus();
+                return false;
+            } else if (packing === "") {
+                alert('Packing is required');
+                row.querySelector('input[name="packing"]').focus();
+                return false;
+            } else if (batchNo === "") {
+                alert('Batch No is required');
+                row.querySelector('input[name="batchNo"]').focus();
+                return false;
+            } else if (retailPrice <= 0) {
+                alert('Retail Price must be greater than 0');
+                row.querySelector('input[name="retailPrice"]').focus();
+                return false;
+            }
+            return true;
+        });
+
+        return allRowsValid;
+    }
+document.getElementById('invoiceForm').onsubmit = function(event) {
+    event.preventDefault();
+
+    
+
+
+
+ // Check if any retail price is 0 or not entered
+ if (!validateForm()) {
+            return;
+        }
+
+        var pharmacyName = document.getElementById('pharmacyName').value;
+    var pharmacyAddress = document.getElementById('pharmacyStreet').value;
+    var pharmacyAddress = document.getElementById('pharmacyCity').value;
+
+
+        var items = [];
+        document.querySelectorAll("#invoiceForm tbody tr").forEach(function(row) {
+            var item = {
+                description: row.querySelector('input[name="description"]').value,
+                qty: parseFloat(row.querySelector('input[name="qty"]').value) || 0,
+                bon: parseFloat(row.querySelector('input[name="bon"]').value) || 0,
+                packing: row.querySelector('input[name="packing"]').value,
+        batchNo: row.querySelector('input[name="batchNo"]').value,
+        retailPrice: parseFloat(row.querySelector('input[name="retailPrice"]').value) || 0,
+        priceAfterDisc: parseFloat(row.querySelector('.price-after-disc').textContent.replace('Rs. ', '')) || 0,
+        addDiscPercent: parseFloat(row.querySelector('input[name="addDiscPercent"]').value) || 0,
+        addDiscValue: parseFloat(row.querySelector('.add-discount-value').textContent.replace('Rs. ', '')) || 0,
+        totalAmount: parseFloat(row.querySelector('.totalAmount').textContent.replace('Rs. ', '')) || 0
+            };
+            items.push(item);
+        });
+
+        var dataToSend = {
+        pharmacyName: document.getElementById('pharmacyName').value,
+        pharmacyAddress: document.getElementById('pharmacyStreet').value,
+        pharmacyAddress: document.getElementById('pharmacyCity').value,
+
+        items: items
+    };
+
+    fetch('handle_invoice_submission.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSend)
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Display success message without reloading the page
+        document.getElementById('submissionMessage').textContent = data.message || 'Invoice submitted successfully!';
+
+        // Optional: You might want to clear the form or take another action here
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('submissionMessage').textContent = 'Error submitting invoice.';
+    });
+
+    // Optional: Keep or clear the form data based on your requirement
+    // If you want to clear the form, you can reset it here
+     document.getElementById('invoiceForm').reset();
+};
+
+
+// Additional JavaScript for setting date and invoice ID
+document.addEventListener('DOMContentLoaded', function() {
+        // Attempt to fetch the next invoice ID from the server
+        fetch('get_invoice.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.next_invoice_id) {
+                    document.getElementById('invoiceId').textContent = data.next_invoice_id;
+                    document.getElementById('invoiceDate').textContent = new Date().toLocaleDateString();
+                } else {
+                    // Handle error, no next_invoice_id found
+                    console.error('Error fetching next invoice ID:', data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+        // Set the current date
+        document.getElementById('invoiceDate').textContent = new Date().toLocaleDateString();
+    });
+
+   
+    function printInvoice() {
+        document.getElementById('printPharmacyName').textContent = document.getElementById('pharmacyName').value;
+    document.getElementById('printPharmacyStreet').textContent = document.getElementById('pharmacyStreet').value;
+    document.getElementById('printPharmacyCity').textContent = document.getElementById('pharmacyCity').value;
+
+
+    // Loop through each row and populate the print-only spans with input values
+    document.querySelectorAll("#invoiceForm tbody tr").forEach(function(row, index) {
+        row.querySelector('#printQty' + (index + 1)).textContent = row.querySelector('input[name="qty"]').value;
+        row.querySelector('#printBon' + (index + 1)).textContent = row.querySelector('input[name="bon"]').value;
+        row.querySelector('#printDescription' + (index + 1)).textContent = row.querySelector('input[name="description"]').value;
+        row.querySelector('#printPack' + (index + 1)).textContent = row.querySelector('input[name="packing"]').value;
+        row.querySelector('#printBatch' + (index + 1)).textContent = row.querySelector('input[name="batchNo"]').value;
+        row.querySelector('#printRetail' + (index + 1)).textContent = row.querySelector('input[name="retailPrice"]').value;
+        row.querySelector('#printDisc' + (index + 1)).textContent = row.querySelector('input[name="addDiscPercent"]').value;
+
+
+    });
+
+        // Trigger the print dialog
+    window.print();
+}
+// Add event listener for the print button
+document.addEventListener('DOMContentLoaded', function() {
+    var printButton = document.getElementById('printButton');
+    if (printButton) {
+        printButton.addEventListener('click', printInvoice);
+    }
+});
+
+
+function setupAutocomplete(descriptionInput) {
+    descriptionInput.onkeyup = function() {
+        showSuggestions(this.value, this.nextElementSibling);
+    };
+}
+
+
+function numberToWords(num) {
+    var units = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+    var teens = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+    var tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+    if (num < 10) return units[num];
+    if (num >= 10 && num < 20) return teens[num - 10];
+    if (num >= 20 && num < 100) {
+        return tens[Math.floor(num / 10)] + (num % 10 !== 0 ? ' ' + units[num % 10] : '');
+    }
+    if (num >= 100 && num < 1000) {
+        return units[Math.floor(num / 100)] + ' Hundred' + (num % 100 !== 0 ? ' ' + numberToWords(num % 100) : '');
+    }
+    if (num >= 1000 && num < 1000000) {
+        return numberToWords(Math.floor(num / 1000)) + ' Thousand' + (num % 1000 !== 0 ? ' ' + numberToWords(num % 1000) : '');
+    }
+    return 'Number too large';
+}
+
+
+
+
+
+// Initialize autocomplete for all existing rows
+
+document.querySelectorAll('.description').forEach(setupAutocomplete);
+updateTotals();
+
+
+</script>
+
+</body>
+</html>

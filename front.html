@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Medical Distrbution System</title>
+    <style>
+       body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Updated font */
+            margin: 0;
+            padding: 0;
+            background: url("images/front.png") no-repeat center center fixed;
+            background-size: cover;
+            color: #333; /* Font color */
+        }
+        .header, .footer {
+            background-color: #003366;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+            font-size: 1.2em; /* Slightly larger font for headers */
+        }
+        .nav {
+            background-color: #333;
+            overflow: hidden;
+        }
+        .nav a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 1.1em; /* Slightly larger font for navigation */
+        }
+        .nav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .container, .login-container {
+            padding: 2em;
+            background-color: rgb(255, 255, 255);
+            margin: auto;
+            border-radius: 10px;
+            width: 60%; /* Adjust width */
+            box-shadow: none; /* Remove box shadow */
+            border: none; /* Remove border */
+            text-align: center; /* Center align text */
+        }
+
+        .welcome, .login-title {
+            font-size: 2.5em; /* Larger and more prominent */
+            margin-bottom: 0.5em;
+            color: #003366; /* Matching the header color */
+        }
+        .description, .login-container {
+            line-height: 1.6;
+            text-align: center;
+        }
+        .login-container input[type="text"], .login-container input[type="password"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .login-container input[type="submit"] {
+            width: 85%;
+            padding: 10px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #003366;
+            color: white;
+            cursor: pointer;
+            font-size: 1.1em; /* Larger font for the button */
+        }
+        .login-container input[type="submit"]:hover {
+            background-color: #005599;
+        }
+
+ /* Style for dropdown */
+ .login-container select {
+            width: 85%; /* Match the width with other inputs */
+            padding: 10px;
+            margin-top: 20px; /* Spacing */
+            border: 1px solid #ddd; /* Border similar to inputs */
+            border-radius: 5px; /* Rounded corners */
+            background-color: white; /* Background color */
+            font-size: 1em; /* Font size */
+            cursor: pointer; /* Cursor */
+        }
+
+        /* Style for dropdown when hovered */
+        .login-container select:hover {
+            border-color: #bbb; /* Slightly darker border on hover */
+        }
+
+        /* Adjust the alignment and margin of the form elements */
+        .login-container form {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+
+
+
+        
+    </style>
+
+
+<link rel="manifest" href="manifest.json">
+
+</head>
+<body>
+    <div class="header">
+        <h1>Medical Distrbution System</h1>
+    </div>
+   
+    <div class="container">
+        <h2 class="welcome">Welcome to MD</h2>
+       
+    </div>
+    <div class="login-container">
+        <h2 class="login-title">User Login</h2>
+        
+        
+        <form action="login.php" method="post">
+            <select name="userType" required>
+                <option value="" disabled selected>Select your role</option>
+                <option value="admin">Admin</option>
+                <option value="worker">Worker</option>
+            </select>
+            <input type="text" placeholder="Username" name="username" required>
+            <input type="password" placeholder="Password" name="password" required>
+            <input type="submit" value="Login">
+        </form>
+    </div>
+  
+</body>
+
+
+<script>
+
+    window.addEventListener('load', () => {
+        registerSW();
+    });
+    
+    // Register the Service Worker
+    async function registerSW() {
+        if ('serviceWorker' in navigator) {
+            try {
+                await navigator
+                    .serviceWorker
+                    .register('serviceworker.js');
+            } catch (e) {
+                console.log('SW registration failed');
+            }
+        }
+    }
+    
+    
+        </script>
+</html>

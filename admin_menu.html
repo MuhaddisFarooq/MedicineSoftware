@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .dashboard-container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .dashboard-button {
+            display: block;
+            width: 200px;
+            padding: 10px;
+            margin: 10px auto;
+            font-size: 16px;
+            text-align: center;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .dashboard-button:hover {
+            background-color: #45a049;
+        }
+        #backButton {
+    position: fixed; /* Use 'fixed' instead of 'absolute' for a button that stays in place while scrolling */
+    left: 10px; /* Distance from the left side */
+    background-color: #c8ff00; /* A neutral color that matches many designs */
+    color: #333; /* A color that ensures the text is readable */
+    border: 1px solid #ccc; /* A subtle border */
+    border-radius: 9px; /* Rounded corners for a modern look */
+    cursor: pointer; /* Changes the cursor to a pointer to indicate it's clickable */
+    font-size: 20px; /* A smaller font size for the text within the button */
+    text-decoration: none; /* Removes underline from text if you're using an <a> tag */
+    box-shadow: 1px 1px 2px #999; /* Optional: Adds a subtle shadow for depth */
+    z-index: 1000;
+    top: 10px;
+    width: 6%; /* Ensures the button is above other elements */
+}
+
+#backButton:hover {
+    background-color: #e2e2e2; /* A slightly different color on hover for feedback */
+    box-shadow: none; /* Optional: Removes the shadow on hover for a pressed effect */
+}
+
+    </style>
+</head>
+<body>
+    <button id="backButton" onclick="window.location.href='front.html'">Back</button>
+
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>Admin Dashboard</h1>
+        </div>
+
+        <!-- Button to trigger adding stock -->
+        <button class="dashboard-button" onclick="location.href='admin_stock.html'">Add Stock</button>
+
+        <!-- Button to trigger viewing stock -->
+        <button class="dashboard-button" onclick="location.href='view_stock.html'">View Stock</button>
+    </div>
+
+    <!-- Include your JavaScript file here if necessary -->
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Selection Menu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            text-align: center;
+            background: url("images/menu.png") no-repeat center center fixed;
+            background-size: cover;
+            font-size: 18px; /* Increased font size */
+        }
+        .menu-container {
+            background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+            padding: 90px;
+            margin: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            width: 500px;
+        }
+        select, button {
+            width: 100%;
+            padding: 12px; /* Slightly larger padding for better touch */
+            margin-top: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 16px; /* Larger font size for form elements */
+        }
+        button {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px; /* Larger font size for buttons */
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        .hidden {
+            display: none;
+        }
+        h2 {
+            font-size: 24px; /* Increased font size for headings */
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            font-size: 20px; /* Larger font size for labels */
+            margin-bottom: 5px;
+        }
+        #backButton {
+    position: fixed; /* Use 'fixed' instead of 'absolute' for a button that stays in place while scrolling */
+    left: 10px; /* Distance from the left side */
+    background-color: #c8ff00; /* A neutral color that matches many designs */
+    color: #333; /* A color that ensures the text is readable */
+    border: 1px solid #ccc; /* A subtle border */
+    border-radius: 9px; /* Rounded corners for a modern look */
+    cursor: pointer; /* Changes the cursor to a pointer to indicate it's clickable */
+    font-size: 20px; /* A smaller font size for the text within the button */
+    text-decoration: none; /* Removes underline from text if you're using an <a> tag */
+    box-shadow: 1px 1px 2px #999; /* Optional: Adds a subtle shadow for depth */
+    z-index: 1000;
+    top: 10px;
+    width: 6%; /* Ensures the button is above other elements */
+}
+
+#backButton:hover {
+    background-color: #e2e2e2; /* A slightly different color on hover for feedback */
+    box-shadow: none; /* Optional: Removes the shadow on hover for a pressed effect */
+}
+
+      
+        
+    </style>
+</head>
+<body>
+    <button id="backButton" onclick="window.location.href='front.html'">Back</button>
+
+<div class="menu-container">
+    <h2>Select Form Type</h2>
+    <form id="form-selection">
+        <div class="form-group">
+            <label for="formType">Form Type:</label>
+            <select id="formType" name="formType">
+                <option value="">Please choose...</option>
+                <option value="nutrition">Nutrition Form</option>
+                <option value="allopathic">Allopathic Form</option>
+            </select>
+        </div>
+
+        <div class="form-group hidden" id="allopathicTypeGroup">
+            <label for="allopathicType">Allopathic Form Type:</label>
+            <select id="allopathicType" name="allopathicType">
+                <option value="">Please choose...</option>
+                <option value="alophatic_invoice.html">Invoice Form</option> <!-- Updated value -->
+                <option value="alophatic_estimate.html">Estimate Form</option> <!-- Updated value -->
+            </select>
+        </div>
+
+        <button type="submit">Go to Form</button>
+    </form>
+
+</div>
+
+
+
+<script>
+
+document.getElementById('formType').addEventListener('change', function() {
+        var allopathicGroup = document.getElementById('allopathicTypeGroup');
+        if (this.value === 'allopathic') {
+            allopathicGroup.classList.remove('hidden');
+        } else {
+            allopathicGroup.classList.add('hidden');
+        }
+    });
+
+    document.getElementById('form-selection').onsubmit = function(event) {
+        event.preventDefault();
+        var formType = document.getElementById('formType').value;
+        var allopathicType = document.getElementById('allopathicType').value;
+
+        if (formType === 'nutrition') {
+            window.location.href = 'nutrition.html';
+        } else if (formType === 'allopathic' && allopathicType) {
+            window.location.href = allopathicType; // Redirects to the selected allopathic form
+        } else {
+            alert('Please select a form type and subtype.');
+        }
+    };
+
+   
+</script>
+
+</body>
+</html>
